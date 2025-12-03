@@ -23,13 +23,13 @@ export default function TestEmbedPage() {
       }}>
         <strong>Script Source:</strong>
         <code style={{ display: 'block', marginTop: '10px', wordBreak: 'break-all' }}>
-          https://ai-agent-website-wedsgaard.vercel.app/widget.js
+          /widget.js (Local testing)
         </code>
       </div>
 
-      {/* Load the widget from Vercel */}
+      {/* Load the widget from local/relative path for testing */}
       <Script 
-        src="https://ai-agent-website-wedsgaard.vercel.app/widget.js" 
+        src="/widget.js" 
         strategy="lazyOnload"
       />
     </div>

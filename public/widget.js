@@ -11,8 +11,8 @@
 
   // Iframe dimensions
   const BUTTON_SIZE = 96; // 56px button + 20px margin on each side
-  const OPEN_WIDTH = 420; // 380px container + 40px margins
-  const OPEN_HEIGHT = 620; // 500px container + 90px bottom + 30px top margin
+  const OPEN_WIDTH = 450; // 380px container + 20px right margin + 50px left margin (for shadow)
+  const OPEN_HEIGHT = 650; // 500px container + 90px bottom + 60px top margin (for shadow)
 
   // Create widget container
   function createWidget(config) {
