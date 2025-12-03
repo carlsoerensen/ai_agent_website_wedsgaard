@@ -47,6 +47,7 @@
   top: auto !important; /* Prevent top positioning */
   width: 56px !important;
   height: 56px !important;
+  z-index: 10000 !important; /* Ensure button is above container */
 }
 
 .widgetButton:hover {
@@ -80,9 +81,14 @@
 }
 
 /* Embedded mode: container uses absolute positioning within wrapper */
+/* Button: bottom 20px, height 56px → button top is at 76px from bottom */
+/* Container must be ABOVE button with 14px gap */
+/* Container bottom should be at: 76px (button top) + 14px (gap) = 90px from bottom */
+/* Container: bottom 90px, height 500px → container top is at 590px from bottom = 30px from top */
+/* This ensures container sits above button with proper spacing */
 .embeddedContainer {
   position: absolute !important;
-  bottom: 90px !important;
+  bottom: 90px !important; /* Button top (76px) + gap (14px) = 90px */
   right: 20px !important;
   left: auto !important;
   top: auto !important;
@@ -94,6 +100,7 @@
   box-sizing: border-box !important;
   flex-shrink: 0 !important;
   flex-grow: 0 !important;
+  z-index: 9999 !important; /* Ensure container is below button (button z-index: 10000) */
 }
 
 /* Header */

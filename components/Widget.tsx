@@ -187,12 +187,15 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             position: 'absolute',
             bottom: '90px',
             right: '20px',
+            left: 'auto',
+            top: 'auto',
             width: '380px',
             maxWidth: '380px',
             minWidth: '380px',
             height: '500px',
             maxHeight: '500px',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            zIndex: 9999
           } : undefined}
         >
           <div className={styles.widgetHeader}>
