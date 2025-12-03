@@ -181,7 +181,20 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
       </button>
 
       {isOpen && (
-        <div className={`${styles.widgetContainer} ${isEmbedded ? styles.embeddedContainer : ''}`}>
+        <div 
+          className={`${styles.widgetContainer} ${isEmbedded ? styles.embeddedContainer : ''}`}
+          style={isEmbedded ? {
+            position: 'absolute',
+            bottom: '90px',
+            right: '20px',
+            width: '380px',
+            maxWidth: '380px',
+            minWidth: '380px',
+            height: '500px',
+            maxHeight: '500px',
+            boxSizing: 'border-box'
+          } : undefined}
+        >
           <div className={styles.widgetHeader}>
             <div className={styles.headerLeft}>
               <div className={styles.avatar}>

@@ -14,6 +14,8 @@
   height: 100%;
   overflow: hidden; /* Prevent any overflow */
   box-sizing: border-box;
+  max-width: 100%; /* Ensure wrapper doesn't exceed iframe */
+  max-height: 100%;
 }
 
 /* Widget Button (Floating) - Always in bottom right */
@@ -74,6 +76,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Embedded mode: container uses absolute positioning within wrapper */
@@ -81,13 +84,16 @@
   position: absolute !important;
   bottom: 90px !important;
   right: 20px !important;
-  left: auto !important; /* Prevent left positioning */
-  top: auto !important; /* Prevent top positioning */
-  width: 380px !important; /* Explicit width to prevent expansion */
+  left: auto !important;
+  top: auto !important;
+  width: 380px !important;
   max-width: 380px !important;
-  min-width: 380px !important; /* Prevent shrinking */
+  min-width: 380px !important;
   height: 500px !important;
   max-height: 500px !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
 }
 
 /* Header */
