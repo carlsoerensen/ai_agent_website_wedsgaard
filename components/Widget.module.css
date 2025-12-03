@@ -37,7 +37,9 @@
 
 /* Embedded mode: button uses absolute positioning within wrapper */
 .embeddedButton {
-  position: absolute;
+  position: absolute !important;
+  bottom: 20px !important;
+  right: 20px !important;
 }
 
 .widgetButton:hover {
@@ -71,9 +73,11 @@
 
 /* Embedded mode: container uses absolute positioning within wrapper */
 .embeddedContainer {
-  position: absolute;
-  bottom: 90px;
-  right: 20px;
+  position: absolute !important;
+  bottom: 90px !important;
+  right: 20px !important;
+  width: 380px !important; /* Explicit width to prevent expansion */
+  max-width: 380px !important;
 }
 
 /* Header */
@@ -451,7 +455,9 @@
 
   /* Embedded mobile: button uses absolute */
   .embeddedButton {
-    position: absolute;
+    position: absolute !important;
+    bottom: 16px !important;
+    right: 16px !important;
   }
 
   .messageBubble {

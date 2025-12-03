@@ -9,10 +9,10 @@
     widgetUrl: null,
   };
 
-  // Iframe dimensions
+  // Iframe dimensions - must match widget container + margins + shadow
   const BUTTON_SIZE = 96; // 56px button + 20px margin on each side
-  const OPEN_WIDTH = 480; // Increased width to ensure no shadow clipping
-  const OPEN_HEIGHT = 700; // Increased height to ensure no vertical clipping
+  const OPEN_WIDTH = 420; // 380px container + 20px right margin + 20px left margin (shadow safe)
+  const OPEN_HEIGHT = 620; // 500px container + 90px bottom + 30px top margin
 
   // Create widget container
   function createWidget(config) {
