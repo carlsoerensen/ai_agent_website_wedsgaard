@@ -139,25 +139,44 @@ export default function Widget({ webhookUrl }: WidgetProps) {
 
   return (
     <>
-      {/* Always show the button, but position it differently when chat is open */}
+      {/* Toggle button - shows chat icon when closed, chevron down when open */}
       <button
-        className={`${styles.widgetButton} ${isOpen ? styles.widgetButtonOpen : ''}`}
+        className={styles.widgetButton}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ display: 'block', margin: '0 auto' }}
-        >
-          <path
-            d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
-            fill="white"
-          />
-        </svg>
+        {isOpen ? (
+          /* Chevron Down Icon when open */
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6 9L12 15L18 9"
+              stroke="white"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ) : (
+          /* Chat Icon when closed */
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
+              fill="white"
+            />
+          </svg>
+        )}
       </button>
 
       {isOpen && (
