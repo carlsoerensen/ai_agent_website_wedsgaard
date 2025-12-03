@@ -9,6 +9,11 @@
     widgetUrl: null,
   };
 
+  // Iframe dimensions
+  const BUTTON_SIZE = 96; // 56px button + 20px margin on each side
+  const OPEN_WIDTH = 420; // 380px container + 40px margins
+  const OPEN_HEIGHT = 620; // 500px container + 90px bottom + 30px top margin
+
   // Create widget container
   function createWidget(config) {
     // Check if widget already exists
@@ -28,49 +33,77 @@
     iframe.src = `${config.widgetUrl}/widget?webhookUrl=${encodeURIComponent(config.webhookUrl || '')}`;
     iframe.allow = 'clipboard-write';
     
-    // Initial state: just show the button area
-    iframe.style.cssText = `
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      width: 100px;
-      height: 100px;
-      border: none;
-      z-index: 999999;
-      background: transparent;
-      pointer-events: auto;
-    `;
+    // Initial state: just show the button area (closed state)
+    const setClosedState = () => {
+      iframe.style.cssText = `
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: ${BUTTON_SIZE}px;
+        height: ${BUTTON_SIZE}px;
+        border: none;
+        z-index: 999999;
+        background: transparent;
+        pointer-events: auto;
+        overflow: hidden;
+      `;
+    };
+
+    // Open state
+    const setOpenState = () => {
+      const isMobile = window.innerWidth <= 480;
+      if (isMobile) {
+        iframe.style.cssText = `
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100%;
+          border: none;
+          z-index: 999999;
+          background: transparent;
+          pointer-events: auto;
+          overflow: hidden;
+        `;
+      } else {
+        iframe.style.cssText = `
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          width: ${OPEN_WIDTH}px;
+          height: ${OPEN_HEIGHT}px;
+          border: none;
+          z-index: 999999;
+          background: transparent;
+          pointer-events: auto;
+          overflow: hidden;
+        `;
+      }
+    };
+
+    // Set initial closed state
+    setClosedState();
 
     // Handle widget open/close state via postMessage
     window.addEventListener('message', function (event) {
       // Verify origin for security
-      if (config.widgetUrl && !event.origin.includes(new URL(config.widgetUrl).host)) {
-        return;
+      if (config.widgetUrl) {
+        try {
+          const widgetHost = new URL(config.widgetUrl).host;
+          if (!event.origin.includes(widgetHost)) {
+            return;
+          }
+        } catch (e) {
+          return;
+        }
       }
 
       if (event.data.type === 'widget-open') {
-        // Check if mobile
-        const isMobile = window.innerWidth <= 480;
-        if (isMobile) {
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
-          iframe.style.bottom = '0';
-          iframe.style.right = '0';
-          iframe.style.left = '0';
-          iframe.style.top = '0';
-        } else {
-          iframe.style.width = '420px';
-          iframe.style.height = '620px';
-          iframe.style.bottom = '0';
-          iframe.style.right = '0';
-        }
+        setOpenState();
       } else if (event.data.type === 'widget-close') {
-        iframe.style.width = '100px';
-        iframe.style.height = '100px';
-        iframe.style.bottom = '0';
-        iframe.style.right = '0';
-        iframe.style.left = '';
-        iframe.style.top = '';
+        setClosedState();
       }
     });
 

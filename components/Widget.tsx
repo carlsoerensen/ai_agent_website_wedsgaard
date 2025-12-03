@@ -12,9 +12,10 @@ interface Message {
 
 interface WidgetProps {
   webhookUrl?: string;
+  isEmbedded?: boolean;
 }
 
-export default function Widget({ webhookUrl }: WidgetProps) {
+export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -138,10 +139,10 @@ export default function Widget({ webhookUrl }: WidgetProps) {
   };
 
   return (
-    <>
+    <div className={`${styles.widgetWrapper} ${isEmbedded ? styles.embedded : ''}`}>
       {/* Toggle button - shows chat icon when closed, chevron down when open */}
       <button
-        className={styles.widgetButton}
+        className={`${styles.widgetButton} ${isEmbedded ? styles.embeddedButton : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
@@ -180,7 +181,7 @@ export default function Widget({ webhookUrl }: WidgetProps) {
       </button>
 
       {isOpen && (
-        <div className={styles.widgetContainer}>
+        <div className={`${styles.widgetContainer} ${isEmbedded ? styles.embeddedContainer : ''}`}>
           <div className={styles.widgetHeader}>
             <div className={styles.headerLeft}>
               <div className={styles.avatar}>
@@ -321,7 +322,7 @@ export default function Widget({ webhookUrl }: WidgetProps) {
       )}
 
       {/* Close button removed - using the main button to toggle instead */}
-    </>
+    </div>
   );
 }
 

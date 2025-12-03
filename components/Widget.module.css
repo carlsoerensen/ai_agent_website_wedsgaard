@@ -1,3 +1,20 @@
+/* Widget Wrapper - Container for the entire widget */
+.widgetWrapper {
+  /* Default: no special styling for direct rendering */
+}
+
+/* Embedded mode: wrapper fills the iframe */
+.embedded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 /* Widget Button (Floating) - Always in bottom right */
 .widgetButton {
   position: fixed;
@@ -16,6 +33,11 @@
   z-index: 10000;
   transition: transform 0.2s, box-shadow 0.2s;
   padding: 0;
+}
+
+/* Embedded mode: button uses absolute positioning within wrapper */
+.embeddedButton {
+  position: absolute;
 }
 
 .widgetButton:hover {
@@ -45,6 +67,13 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   overflow: hidden;
+}
+
+/* Embedded mode: container uses absolute positioning within wrapper */
+.embeddedContainer {
+  position: absolute;
+  bottom: 90px;
+  right: 20px;
 }
 
 /* Header */
@@ -403,12 +432,26 @@
     z-index: 9999;
   }
 
+  /* Embedded mobile: absolute positioning */
+  .embeddedContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
   .widgetButton {
     bottom: 16px;
     right: 16px;
     width: 52px;
     height: 52px;
     z-index: 10001;
+  }
+
+  /* Embedded mobile: button uses absolute */
+  .embeddedButton {
+    position: absolute;
   }
 
   .messageBubble {

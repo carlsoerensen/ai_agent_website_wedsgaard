@@ -15,13 +15,15 @@ function WidgetContent() {
 
   return (
     <div style={{ 
+      position: 'fixed',
+      top: 0,
+      left: 0,
       width: '100%', 
       height: '100%',
-      position: 'relative', 
       overflow: 'hidden',
       background: 'transparent'
     }}>
-      <Widget webhookUrl={webhookUrl || undefined} />
+      <Widget webhookUrl={webhookUrl || undefined} isEmbedded={true} />
     </div>
   );
 }
