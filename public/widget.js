@@ -12,8 +12,9 @@
   // Iframe dimensions - must match widget container + margins + shadow
   const BUTTON_SIZE = 96; // 56px button + 20px margin on each side
   const OPEN_WIDTH = 420; // 380px container + 20px right margin + 20px left margin (shadow safe)
-  // Height calculation: button (56px) + button bottom (20px) + gap (14px) + container (500px) + top margin (30px) = 620px
-  const OPEN_HEIGHT = 620; // Ensures container sits above button with proper spacing
+  // Height calculation: container (500px) + container bottom (76px) + top margin (44px) = 620px
+  // Container sits at bottom: 76px (just above button top at 76px)
+  const OPEN_HEIGHT = 620; // Ensures container sits above button
 
   // Create widget container
   function createWidget(config) {
