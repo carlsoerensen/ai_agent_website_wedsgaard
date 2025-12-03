@@ -1,8 +1,12 @@
-/* Widget Container */
+/* Widget Container - Positioned above the button on desktop */
 .widgetContainer {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  bottom: 90px; /* Position above the button (60px button + 20px bottom + 10px gap) */
+  right: 20px;
+  width: 400px;
+  max-width: calc(100vw - 40px);
+  height: 600px;
+  max-height: calc(100vh - 110px); /* Account for button space */
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -14,7 +18,7 @@
   overflow: hidden;
 }
 
-/* Widget Button (Floating) */
+/* Widget Button (Floating) - Always visible in bottom right */
 .widgetButton {
   position: fixed;
   bottom: 20px;
@@ -29,7 +33,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
-  z-index: 10000; /* Higher z-index to stay above widget container */
+  z-index: 10000; /* Always on top */
   transition: transform 0.2s, box-shadow 0.2s;
   padding: 0;
   margin: 0;
@@ -40,9 +44,11 @@
   display: block;
   margin: 0 auto;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
 }
 
-/* When chat is open, button stays in same position but above the chat */
+/* When chat is open, button stays in same position */
 .widgetButtonOpen {
   z-index: 10001; /* Even higher when open to stay on top */
 }
@@ -456,17 +462,6 @@
     width: 56px;
     height: 56px;
     z-index: 10001; /* Stay on top on mobile too */
-  }
-
-  .closeButton {
-    /* On mobile, position close button inside the widget at top right */
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    bottom: auto;
-    width: 36px;
-    height: 36px;
-    background: rgba(139, 92, 246, 0.9);
   }
 
   .messageBubble {

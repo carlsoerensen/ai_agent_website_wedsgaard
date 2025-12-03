@@ -50,17 +50,34 @@
       }
 
       if (event.data.type === 'widget-open') {
-        iframe.style.width = '400px';
-        iframe.style.height = '600px';
-        iframe.style.borderRadius = '16px';
-        iframe.style.bottom = '20px';
-        iframe.style.right = '20px';
+        // On desktop, position chat above button; on mobile, full screen
+        if (window.innerWidth > 480) {
+          iframe.style.width = '400px';
+          iframe.style.height = '600px';
+          iframe.style.maxHeight = 'calc(100vh - 110px)';
+          iframe.style.borderRadius = '16px';
+          iframe.style.bottom = '90px'; // Above the button
+          iframe.style.right = '20px';
+        } else {
+          // Mobile: full screen
+          iframe.style.width = '100%';
+          iframe.style.height = '100dvh';
+          iframe.style.maxHeight = '100dvh';
+          iframe.style.borderRadius = '0';
+          iframe.style.bottom = '0';
+          iframe.style.right = '0';
+          iframe.style.left = '0';
+          iframe.style.top = '0';
+        }
       } else if (event.data.type === 'widget-close') {
         iframe.style.width = '60px';
         iframe.style.height = '60px';
         iframe.style.borderRadius = '50%';
         iframe.style.bottom = '20px';
         iframe.style.right = '20px';
+        iframe.style.left = 'auto';
+        iframe.style.top = 'auto';
+        iframe.style.maxHeight = 'none';
       } else if (event.data.type === 'widget-resize') {
         iframe.style.height = event.data.height + 'px';
       }
