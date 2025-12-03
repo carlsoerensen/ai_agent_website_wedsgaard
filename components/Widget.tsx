@@ -145,6 +145,25 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         className={`${styles.widgetButton} ${isEmbedded ? styles.embeddedButton : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close chat" : "Open chat"}
+        style={isEmbedded ? {
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          left: 'auto',
+          top: 'auto',
+          width: '56px',
+          height: '56px',
+          background: '#8b5cf6',
+          border: 'none',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)',
+          zIndex: 10000,
+          padding: 0
+        } : undefined}
       >
         {isOpen ? (
           /* Chevron Down Icon when open */
@@ -184,18 +203,29 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         <div 
           className={`${styles.widgetContainer} ${isEmbedded ? styles.embeddedContainer : ''}`}
           style={isEmbedded ? {
+            // Positioning - must match main page exactly
             position: 'absolute',
-            bottom: '90px', // MUST match main page: 90px for 14px gap above button
+            bottom: '90px',
             right: '20px',
             left: 'auto',
             top: 'auto',
+            // Dimensions - exact match
             width: '380px',
             maxWidth: '380px',
             minWidth: '380px',
             height: '500px',
             maxHeight: '500px',
-            boxSizing: 'border-box',
-            zIndex: 9999
+            // Visual properties - MUST include to match main page
+            background: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+            // Layout
+            display: 'flex',
+            flexDirection: 'column' as const,
+            overflow: 'hidden',
+            boxSizing: 'border-box' as const,
+            zIndex: 9999,
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"
           } : undefined}
         >
           <div className={styles.widgetHeader}>
