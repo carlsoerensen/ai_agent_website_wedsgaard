@@ -9,12 +9,11 @@
     widgetUrl: null,
   };
 
-  // Iframe dimensions - must match widget container + margins + shadow
-  const BUTTON_SIZE = 96; // 56px button + 20px margin on each side
-  const OPEN_WIDTH = 460; // 380px container + 20px right margin + 60px left margin (for shadow)
-  // Height calculation: container (500px) + container bottom (90px) + top margin (30px) = 620px
-  // Container sits at bottom: 90px (14px gap above button top at 76px)
-  const OPEN_HEIGHT = 620; // Ensures container sits above button with proper gap
+  // Iframe dimensions - generous to allow full shadow rendering
+  const BUTTON_SIZE = 100; // 56px button + margins for shadow
+  const OPEN_WIDTH = 500; // 380px container + 40px margins + shadow space
+  // Height: container (500px) + bottom spacing (100px) + top shadow (50px) = 650px
+  const OPEN_HEIGHT = 650;
 
   // Create widget container
   function createWidget(config) {
@@ -67,9 +66,11 @@
           z-index: 999999;
           background: transparent;
           pointer-events: auto;
-          overflow: hidden;
+          overflow: visible;
         `;
       } else {
+        // Position iframe to allow shadows to render properly
+        // The widget inside will handle the visual positioning
         iframe.style.cssText = `
           position: fixed;
           bottom: 0;
@@ -80,7 +81,7 @@
           z-index: 999999;
           background: transparent;
           pointer-events: auto;
-          overflow: hidden;
+          overflow: visible;
         `;
       }
     };
