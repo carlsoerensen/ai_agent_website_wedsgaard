@@ -5,6 +5,7 @@ export const runtime = 'edge';
 const ALLOWED_ORIGINS = [
   'https://wedsgaard.dk',
   'https://www.wedsgaard.dk',
+  'https://ai-agent-website-wedsgaard.vercel.app', // Vercel deployment
   'http://localhost:3000', // Keep localhost for testing
   'http://127.0.0.1:3000'
 ];
