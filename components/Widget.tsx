@@ -185,7 +185,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
           className={`${styles.widgetContainer} ${isEmbedded ? styles.embeddedContainer : ''}`}
           style={isEmbedded ? {
             position: 'absolute',
-            bottom: '76px', // Button top (76px) - ensures container sits just above button
+            bottom: '90px', // MUST match main page: 90px for 14px gap above button
             right: '20px',
             left: 'auto',
             top: 'auto',

@@ -81,14 +81,13 @@
 }
 
 /* Embedded mode: container uses absolute positioning within wrapper */
+/* MUST MATCH DIRECT RENDER: bottom: 90px to match main page behavior */
 /* Button: bottom 20px, height 56px → button top edge is at 76px from iframe bottom */
-/* Container must be ABOVE button with 14px gap */
-/* Container bottom edge should be: 76px (button top) - 14px (gap) = 62px from bottom */
-/* Container: bottom 62px, height 500px → container top is at 562px from bottom = 58px from top */
-/* This ensures container sits above button with proper spacing */
+/* Container: bottom 90px → gives 14px gap (90px - 76px = 14px) */
+/* Container: bottom 90px, height 500px → container top is at 590px from bottom = 30px from top */
 .embeddedContainer {
   position: absolute !important;
-  bottom: 76px !important; /* Button top (76px) - no gap, or use 90px for gap above */
+  bottom: 90px !important; /* MUST match .widgetContainer bottom: 90px for consistency */
   right: 20px !important;
   left: auto !important;
   top: auto !important;
