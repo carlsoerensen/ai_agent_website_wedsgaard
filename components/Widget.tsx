@@ -48,6 +48,14 @@ export default function Widget({ webhookUrl }: WidgetProps) {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
+    
+    // Notify parent window (if in iframe) about open/close state
+    if (typeof window !== 'undefined' && window.parent !== window) {
+      window.parent.postMessage(
+        { type: isOpen ? 'widget-open' : 'widget-close' },
+        '*'
+      );
+    }
   }, [isOpen]);
 
   const sendMessage = async (textOverride?: string) => {
@@ -296,7 +304,10 @@ export default function Widget({ webhookUrl }: WidgetProps) {
       {isOpen && (
         <button
           className={styles.closeButton}
-          onClick={() => setIsOpen(false)}
+          onClick={() => {
+            setIsOpen(false);
+            setMessages([]); // Clear messages when closing
+          }}
           aria-label="Close chat"
         >
           <svg
