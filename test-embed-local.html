@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Widget - Local Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            background: #f9fafb;
+        }
+        h1 {
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        p {
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        .code-block {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .note {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .test-section {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 AI Agent Widget - Local Testing</h1>
+    
+    <div class="warning">
+        <strong>⚠️ Important:</strong> Make sure your Next.js dev server is running on <code>http://localhost:3000</code> before opening this file!
+    </div>
+
+    <div class="test-section">
+        <h2>Widget Status</h2>
+        <p>The widget should appear in the <strong>bottom right corner</strong> of this page.</p>
+        <p>If you don't see it:</p>
+        <ul>
+            <li>Check that <code>npm run dev</code> is running</li>
+            <li>Open browser console (F12) and look for errors</li>
+            <li>Verify the server is accessible at <code>http://localhost:3000</code></li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Testing Checklist</h2>
+        <ul>
+            <li>✅ Widget button appears in bottom right</li>
+            <li>✅ Clicking button opens chat interface</li>
+            <li>✅ Welcome screen shows "Mira, Your All-in-One Assistant"</li>
+            <li>✅ Can type in input field</li>
+            <li>✅ Send button works (purple button with paper plane icon)</li>
+            <li>✅ Messages appear in chat bubbles</li>
+            <li>✅ Loading indicator shows while waiting for response</li>
+            <li>✅ n8n webhook receives messages</li>
+            <li>✅ Responses appear in chat</li>
+            <li>✅ Close button (X) closes the widget</li>
+            <li>✅ Widget is responsive (try resizing browser)</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Embedding Code Used</h2>
+        <p>This page uses the following embedding code:</p>
+        <div class="code-block">
+            <code>
+&lt;script src="http://localhost:3000/widget.js"&gt;&lt;/script&gt;
+            </code>
+        </div>
+        
+        <h3 style="margin-top: 24px;">With Custom Webhook</h3>
+        <div class="code-block">
+            <code>
+&lt;script 
+  src="http://localhost:3000/widget.js"
+  data-webhook-url="https://handwork.app.n8n.cloud/webhook-test/wedsgaard_agent"
+&gt;&lt;/script&gt;
+            </code>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Quick Commands</h2>
+        <p>To test the n8n webhook directly:</p>
+        <div class="code-block">
+            <code>
+curl -X POST https://handwork.app.n8n.cloud/webhook-test/wedsgaard_agent \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"message": "Hello, this is a test"}'
+            </code>
+        </div>
+        
+        <p style="margin-top: 16px;">To test the API route:</p>
+        <div class="code-block">
+            <code>
+curl -X POST http://localhost:3000/api/chat \<br>
+  -H "Content-Type: application/json" \<br>
+  -d '{"message": "Hello"}'
+            </code>
+        </div>
+    </div>
+
+    <!-- AI Agent Widget -->
+    <script src="http://localhost:3000/widget.js"></script>
+    
+    <script>
+        // Check if widget script loaded
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (document.getElementById('ai-agent-widget-root')) {
+                    console.log('✅ Widget loaded successfully!');
+                } else {
+                    console.error('❌ Widget failed to load. Check that the dev server is running.');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+
+
