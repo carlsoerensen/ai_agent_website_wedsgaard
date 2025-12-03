@@ -139,26 +139,26 @@ export default function Widget({ webhookUrl }: WidgetProps) {
 
   return (
     <>
-      {!isOpen && (
-        <button
-          className={styles.widgetButton}
-          onClick={() => setIsOpen(true)}
-          aria-label="Open chat"
+      {/* Always show the button, but position it differently when chat is open */}
+      <button
+        className={`${styles.widgetButton} ${isOpen ? styles.widgetButtonOpen : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close chat" : "Open chat"}
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ display: 'block', margin: '0 auto' }}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
-              fill="white"
-            />
-          </svg>
-        </button>
-      )}
+          <path
+            d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
+            fill="white"
+          />
+        </svg>
+      </button>
 
       {isOpen && (
         <div className={styles.widgetContainer}>
@@ -301,32 +301,7 @@ export default function Widget({ webhookUrl }: WidgetProps) {
         </div>
       )}
 
-      {isOpen && (
-        <button
-          className={styles.closeButton}
-          onClick={() => {
-            setIsOpen(false);
-            setMessages([]); // Clear messages when closing
-          }}
-          aria-label="Close chat"
-        >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18 6L6 18M6 6L18 18"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-      )}
+      {/* Close button removed - using the main button to toggle instead */}
     </>
   );
 }
