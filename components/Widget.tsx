@@ -21,8 +21,19 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 480);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     // Generate or retrieve session ID
@@ -138,97 +149,144 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
     }
   };
 
+  // On mobile, hide button when chat is open (use header close button instead)
+  const showFloatingButton = !isMobile || !isOpen;
+
   return (
     <div className={`${styles.widgetWrapper} ${isEmbedded ? styles.embedded : ''}`}>
-      {/* Toggle button - shows chat icon when closed, chevron down when open */}
-      <button
-        className={`${styles.widgetButton} ${isEmbedded ? styles.embeddedButton : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label={isOpen ? "Close chat" : "Open chat"}
-        style={isEmbedded ? {
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          left: 'auto',
-          top: 'auto',
-          width: '56px',
-          height: '56px',
-          background: '#8b5cf6',
-          border: 'none',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)',
-          zIndex: 10000,
-          padding: 0
-        } : undefined}
-      >
-        {isOpen ? (
-          /* Chevron Down Icon when open */
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 9L12 15L18 9"
-              stroke="white"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        ) : (
-          /* Chat Icon when closed */
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
-              fill="white"
-            />
-          </svg>
-        )}
-      </button>
+      {/* Toggle button - hidden on mobile when chat is open */}
+      {showFloatingButton && (
+        <button
+          className={`${styles.widgetButton} ${isEmbedded ? styles.embeddedButton : ''}`}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close chat" : "Open chat"}
+          style={isEmbedded ? {
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            left: 'auto',
+            top: 'auto',
+            width: '56px',
+            height: '56px',
+            background: '#8b5cf6',
+            border: 'none',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)',
+            zIndex: 10000,
+            padding: 0
+          } : undefined}
+        >
+          {isOpen ? (
+            /* Chevron Down Icon when open */
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M6 9L12 15L18 9"
+                stroke="white"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ) : (
+            /* Chat Icon when closed */
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
+                fill="white"
+              />
+            </svg>
+          )}
+        </button>
+      )}
 
       {isOpen && (
         <div 
           className={`${styles.widgetContainer} ${isEmbedded ? styles.embeddedContainer : ''}`}
-          style={isEmbedded ? {
-            // Positioning - must match main page exactly
+          style={isEmbedded ? (isMobile ? {
+            // MOBILE: Full screen
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            height: '100%',
+            maxWidth: '100%',
+            maxHeight: '100%',
+            minWidth: '100%',
+            background: 'white',
+            borderRadius: 0,
+            boxShadow: 'none',
+            display: 'flex',
+            flexDirection: 'column' as const,
+            overflow: 'hidden',
+            boxSizing: 'border-box' as const,
+            zIndex: 10002,
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"
+          } : {
+            // DESKTOP: Positioned above button
             position: 'absolute',
             bottom: '90px',
             right: '20px',
             left: 'auto',
             top: 'auto',
-            // Dimensions - exact match
             width: '380px',
             maxWidth: '380px',
             minWidth: '380px',
             height: '500px',
             maxHeight: '500px',
-            // Visual properties - MUST include to match main page
             background: 'white',
             borderRadius: '16px',
             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-            // Layout
             display: 'flex',
             flexDirection: 'column' as const,
             overflow: 'hidden',
             boxSizing: 'border-box' as const,
             zIndex: 9999,
             fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif"
-          } : undefined}
+          }) : undefined}
         >
           <div className={styles.widgetHeader}>
+            {/* Close button on mobile */}
+            {isMobile && (
+              <button
+                onClick={() => setIsOpen(false)}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  border: 'none',
+                  background: '#f3f4f6',
+                  color: '#6b7280',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginRight: '12px',
+                  flexShrink: 0
+                }}
+                aria-label="Close chat"
+              >
+                ×
+              </button>
+            )}
             <div className={styles.headerLeft}>
               <div className={styles.avatar}>
                 <div className={styles.avatarPixel}></div>
@@ -244,7 +302,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
               className={styles.newChatButton}
               onClick={() => {
                 setMessages([]);
-                setIsOpen(false);
+                if (isMobile) setIsOpen(false);
               }}
               aria-label="New chat"
             >
