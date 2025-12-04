@@ -1,121 +1,146 @@
 # Client Embedding Guide
 
-## Quick Start
+## Quick Start - Wedsgaard Ejendomme
 
-Once your widget is deployed to Vercel, provide your clients with one of these embedding options:
-
-### Option 1: Simple Embedding (Recommended)
-
-This uses the default webhook URL from your environment variables:
+### Anbefalet Embed Kode (SEO-optimeret)
 
 ```html
-<script src="https://your-vercel-domain.vercel.app/widget.js"></script>
+<script src="https://ai-agent-website-wedsgaard.vercel.app/widget.min.js" async></script>
 ```
 
-The script will automatically detect the widget URL from its own source.
+**Vigtigt:**
+- Brug `widget.min.js` (minificeret version) for bedre performance
+- `async` attributten sikrer at scriptet ikke blokerer sidens indlæsning
+- Placér scriptet lige før `</body>` tag'et
 
-### Option 2: Custom Webhook URL (Per Client)
+---
 
-If you want each client to use their own n8n webhook:
+## Placering
 
-```html
-<script 
-  src="https://your-vercel-domain.vercel.app/widget.js"
-  data-webhook-url="https://handwork.app.n8n.cloud/webhook-test/client-specific-agent"
-></script>
-```
-
-### Option 3: Explicit Widget URL
-
-If you need to explicitly specify the widget URL:
-
-```html
-<script 
-  src="https://your-vercel-domain.vercel.app/widget.js"
-  data-widget-url="https://your-vercel-domain.vercel.app"
-  data-webhook-url="https://handwork.app.n8n.cloud/webhook-test/client-specific-agent"
-></script>
-```
-
-## Placement
-
-Place the script tag just before the closing `</body>` tag for best performance:
+Indsæt scriptet lige før `</body>` for bedst performance og SEO:
 
 ```html
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Website</title>
+  <title>Min Hjemmeside</title>
 </head>
 <body>
-  <!-- Your website content -->
+  <!-- Dit website indhold -->
   
-  <!-- AI Agent Widget -->
-  <script src="https://your-vercel-domain.vercel.app/widget.js"></script>
+  <!-- AI Agent Widget - placér lige før </body> -->
+  <script src="https://ai-agent-website-wedsgaard.vercel.app/widget.min.js" async></script>
 </body>
 </html>
 ```
 
-## How It Works
+---
 
-1. The script tag loads `widget.js` from your Vercel domain
-2. The script automatically creates an iframe pointing to `/widget` on your domain
-3. The widget communicates with your API route at `/api/chat`
-4. Your API route proxies messages to the n8n webhook
-5. Responses flow back through the same chain
+## Platform-specifikke Instruktioner
 
-## Security
+### WordPress
+1. Installer plugin: **"Insert Headers and Footers"**
+2. Gå til Indstillinger → Insert Headers and Footers
+3. Indsæt i "Scripts in Footer":
+```html
+<script src="https://ai-agent-website-wedsgaard.vercel.app/widget.min.js" async></script>
+```
+4. Gem
 
-- The widget uses an iframe for isolation
-- CORS headers are configured to allow embedding
-- Webhook URLs can be customized per client
-- All communication goes through your secure API route
+### Shopify
+1. Gå til Online Store → Themes → Edit code
+2. Åbn `theme.liquid`
+3. Indsæt lige før `</body>`:
+```html
+<script src="https://ai-agent-website-wedsgaard.vercel.app/widget.min.js" async></script>
+```
+4. Gem
 
-## Customization
+### Squarespace
+1. Gå til Settings → Advanced → Code Injection
+2. Indsæt i "Footer" feltet
+3. Gem
 
-### Per-Client Webhooks
+### Wix
+1. Gå til Settings → Custom Code
+2. Klik "Add Code"
+3. Indsæt scriptet
+4. Vælg "Body - end" og "All pages"
+5. Gem
 
-You can provide different webhook URLs to different clients by including the `data-webhook-url` attribute:
+### Webflow
+1. Gå til Project Settings → Custom Code
+2. Indsæt i "Footer Code"
+3. Gem og publish
+
+---
+
+## Avancerede Muligheder
+
+### Brug af ikke-minificeret version (debugging)
 
 ```html
-<!-- Client A -->
-<script 
-  src="https://your-vercel-domain.vercel.app/widget.js"
-  data-webhook-url="https://handwork.app.n8n.cloud/webhook-test/client-a-agent"
-></script>
+<script src="https://ai-agent-website-wedsgaard.vercel.app/widget.js" async></script>
+```
 
-<!-- Client B -->
+### Custom Webhook URL (til andre klienter)
+
+```html
 <script 
-  src="https://your-vercel-domain.vercel.app/widget.js"
-  data-webhook-url="https://handwork.app.n8n.cloud/webhook-test/client-b-agent"
+  src="https://ai-agent-website-wedsgaard.vercel.app/widget.min.js"
+  data-webhook-url="https://your-n8n-instance.com/webhook/your-agent"
+  async
 ></script>
 ```
 
-## Troubleshooting
+---
 
-### Widget doesn't appear
+## Fil Størrelser
 
-1. Check browser console for errors
-2. Verify the script URL is correct
-3. Ensure the Vercel deployment is live
-4. Check that no ad blockers are interfering
+| Fil | Størrelse | Anbefalet til |
+|-----|-----------|---------------|
+| `widget.min.js` | ~2 KB | Produktion ✅ |
+| `widget.js` | ~4 KB | Debugging/udvikling |
 
-### Messages not sending
+---
 
-1. Verify the n8n webhook URL is correct
-2. Check the browser network tab for API errors
-3. Verify CORS headers are configured correctly
-4. Check Vercel function logs for errors
+## Sådan Virker Det
 
-### Widget looks broken
+1. Scriptet loader asynkront (blokerer ikke siden)
+2. En iframe oprettes i nederste højre hjørne
+3. Brugerens beskeder sendes til `/api/chat`
+4. API'et videresender til n8n webhook
+5. AI-svar vises i chatten
 
-1. Clear browser cache
-2. Check that CSS is loading properly
-3. Verify the iframe is loading correctly
-4. Check browser console for CSS errors
+---
+
+## Sikkerhed
+
+- Widgeten er begrænset til kun at virke på `wedsgaard.dk`
+- Al kommunikation går gennem sikker HTTPS
+- Webhook URL'er er beskyttet server-side
+
+---
+
+## Fejlfinding
+
+### Widget vises ikke
+1. Tjek browser konsol for fejl (F12)
+2. Verificér at script URL er korrekt
+3. Tjek at ingen ad-blockers blokerer
+
+### Beskeder sendes ikke
+1. Tjek at n8n webhook er aktiv
+2. Tjek Network tab i browser DevTools
+3. Verificér at domænet er på allowed list
+
+### Widget ser forkert ud
+1. Ryd browser cache
+2. Tjek at iframe loader korrekt
+3. Test på en anden browser
+
+---
 
 ## Support
 
-For technical support, contact your development team.
-
-
+Ved tekniske spørgsmål, kontakt udviklingsteamet.
