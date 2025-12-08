@@ -357,23 +357,6 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
           </div>
 
           <div className={styles.inputContainer}>
-            <button className={styles.attachButton} aria-label="Attach file">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12.5 2.5L7.5 7.5C6.95 8.05 6.95 8.95 7.5 9.5C8.05 10.05 8.95 10.05 9.5 9.5L14.5 4.5C15.6 3.4 15.6 1.6 14.5 0.5C13.4 -0.6 11.6 -0.6 10.5 0.5L5.5 5.5C3.7 7.3 3.7 10.2 5.5 12C7.3 13.8 10.2 13.8 12 12L17 7"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
             <input
               ref={inputRef}
               type="text"
@@ -406,6 +389,19 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
                 />
               </svg>
             </button>
+          </div>
+
+          <div className={styles.poweredBy}>
+            <span className={styles.poweredByIcon}>⚡</span>
+            <span className={styles.poweredByText}>Powered by </span>
+            <a 
+              href="https://håndværker-ai.dk" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className={styles.poweredByLink}
+            >
+              håndværker-ai.dk
+            </a>
           </div>
         </div>
       )}

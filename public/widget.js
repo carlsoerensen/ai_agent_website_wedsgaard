@@ -5,7 +5,7 @@
   const DEFAULT_CONFIG = {
     webhookUrl: null,
     position: 'bottom-right',
-    primaryColor: '#8b5cf6',
+    primaryColor: '#6b8068',
     widgetUrl: null,
   };
 
