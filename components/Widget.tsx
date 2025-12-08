@@ -168,14 +168,14 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             top: 'auto',
             width: '56px',
             height: '56px',
-            background: '#8b5cf6',
+            background: '#6b8068',
             border: 'none',
             borderRadius: '50%',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)',
+            boxShadow: '0 4px 16px rgba(107, 128, 104, 0.4)',
             zIndex: 10000,
             padding: 0
           } : undefined}
@@ -263,50 +263,27 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
           }) : undefined}
         >
           <div className={styles.widgetHeader}>
-            {/* Close button on mobile */}
-            {isMobile && (
-              <button
-                onClick={() => setIsOpen(false)}
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  border: 'none',
-                  background: '#f3f4f6',
-                  color: '#6b7280',
-                  fontSize: '20px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginRight: '12px',
-                  flexShrink: 0
-                }}
-                aria-label="Close chat"
-              >
-                ×
-              </button>
-            )}
             <div className={styles.headerLeft}>
               <div className={styles.avatar}>
-                <div className={styles.avatarPixel}></div>
+                <img 
+                  src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
+                  alt="Wedsgaard" 
+                  className={styles.avatarImage}
+                />
               </div>
               <div className={styles.headerText}>
-                <div className={styles.headerTitle}>Wedsgaard Ejendomme</div>
+                <div className={styles.headerTitle}>Tømrerfirmaet Wedsgaard</div>
                 <div className={styles.headerSubtitle}>
                   Digital Svend
                 </div>
               </div>
             </div>
             <button
-              className={styles.newChatButton}
-              onClick={() => {
-                setMessages([]);
-                if (isMobile) setIsOpen(false);
-              }}
-              aria-label="New chat"
+              className={styles.closeHeaderButton}
+              onClick={() => setIsOpen(false)}
+              aria-label="Close chat"
             >
-              +
+              ×
             </button>
           </div>
 
@@ -314,10 +291,14 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             {messages.length === 0 ? (
               <div className={styles.welcomeScreen}>
                 <div className={styles.welcomeAvatar}>
-                  <div className={styles.avatarPixelLarge}></div>
+                  <img 
+                    src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
+                    alt="Wedsgaard" 
+                    className={styles.avatarImageLarge}
+                  />
                 </div>
                 <div className={styles.welcomeTitle}>
-                  Wedsgaard Ejendomme
+                  Tømrerfirmaet Wedsgaard
                 </div>
                 <button 
                   className={styles.demoButton}
@@ -351,7 +332,11 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
                   >
                     {message.sender === 'assistant' && (
                       <div className={styles.messageAvatar}>
-                        <div className={styles.avatarPixelSmall}></div>
+                        <img 
+                          src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
+                          alt="Wedsgaard" 
+                          className={styles.avatarImageSmall}
+                        />
                       </div>
                     )}
                     <div className={styles.messageBubble}>

@@ -25,14 +25,14 @@
   right: 20px;
   width: 56px;
   height: 56px;
-  background: #8b5cf6;
+  background: #6b8068;
   border: none;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 16px rgba(107, 128, 104, 0.4);
   z-index: 10000;
   transition: transform 0.2s, box-shadow 0.2s;
   padding: 0;
@@ -52,7 +52,7 @@
 
 .widgetButton:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 6px 20px rgba(107, 128, 104, 0.5);
 }
 
 .widgetButton:active {
@@ -122,19 +122,26 @@
 .avatar {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background: #f3f4f6;
+  border-radius: 6px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .avatarPixel {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #7a9177 0%, #6b8068 100%);
   border-radius: 4px;
+}
+
+.avatarImage {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .headerText {
@@ -177,6 +184,29 @@
   border-color: #d1d5db;
 }
 
+.closeHeaderButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #6b7280;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.closeHeaderButton:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
 /* Messages Container */
 .messagesContainer {
   flex: 1;
@@ -217,21 +247,28 @@
 }
 
 .welcomeAvatar {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: #f3f4f6;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  overflow: hidden;
 }
 
 .avatarPixelLarge {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #7a9177 0%, #6b8068 100%);
   border-radius: 8px;
+}
+
+.avatarImageLarge {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 .welcomeTitle {
@@ -279,19 +316,26 @@
 .messageAvatar {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-  background: #f3f4f6;
+  border-radius: 4px;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .avatarPixelSmall {
   width: 18px;
   height: 18px;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #7a9177 0%, #6b8068 100%);
   border-radius: 3px;
+}
+
+.avatarImageSmall {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .messageBubble {
@@ -303,7 +347,7 @@
 }
 
 .userMessage .messageBubble {
-  background: #8b5cf6;
+  background: #6b8068;
   color: white;
   border-bottom-right-radius: 4px;
 }
@@ -401,7 +445,7 @@
 }
 
 .input:focus {
-  border-color: #8b5cf6;
+  border-color: #6b8068;
 }
 
 .input::placeholder {
@@ -416,7 +460,7 @@
 .sendButton {
   width: 36px;
   height: 36px;
-  background: #8b5cf6;
+  background: #6b8068;
   border: none;
   border-radius: 50%;
   color: white;
@@ -429,7 +473,7 @@
 }
 
 .sendButton:hover:not(:disabled) {
-  background: #7c3aed;
+  background: #5a6f57;
 }
 
 .sendButton:disabled {
