@@ -9,8 +9,10 @@
     widgetUrl: null,
   };
 
-  // Iframe dimensions - generous to allow full shadow rendering
-  const BUTTON_SIZE = 100; // 56px button + margins for shadow
+  // Iframe dimensions - generous to allow full shadow/glow and popup rendering
+  // Closed state needs space for: button (56px) + glow (40px each side) + popup bubble above
+  const CLOSED_WIDTH = 340; // popup (260px) + right margin (20px) + glow space (60px)
+  const CLOSED_HEIGHT = 220; // button area (100px) + popup bubble (~120px)
   const OPEN_WIDTH = 500; // 380px container + 40px margins + shadow space
   // Height: container (500px) + bottom spacing (100px) + top shadow (50px) = 650px
   const OPEN_HEIGHT = 650;
@@ -34,19 +36,19 @@
     iframe.src = `${config.widgetUrl}/widget?webhookUrl=${encodeURIComponent(config.webhookUrl || '')}`;
     iframe.allow = 'clipboard-write';
     
-    // Initial state: just show the button area (closed state)
+    // Initial state: larger area to show button + popup bubble + glow
     const setClosedState = () => {
       iframe.style.cssText = `
         position: fixed;
         bottom: 0;
         right: 0;
-        width: ${BUTTON_SIZE}px;
-        height: ${BUTTON_SIZE}px;
+        width: ${CLOSED_WIDTH}px;
+        height: ${CLOSED_HEIGHT}px;
         border: none;
         z-index: 999999;
         background: transparent;
         pointer-events: auto;
-        overflow: hidden;
+        overflow: visible;
       `;
     };
 
