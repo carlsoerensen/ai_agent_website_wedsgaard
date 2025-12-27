@@ -15,6 +15,9 @@ interface WidgetProps {
   isEmbedded?: boolean;
 }
 
+// Welcome message for the carpenter/tømrer business
+const WELCOME_MESSAGE = "Hej! 👋 Velkommen til Tømrerfirmaet Wedsgaard. Jeg er din digitale svend og kan hjælpe dig med alt fra tilbud på tømrerarbejde, til spørgsmål om renovering, tilbygninger eller andre byggeprojekter. Hvordan kan jeg hjælpe dig i dag?";
+
 export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -22,8 +25,15 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+  const [hasShownWelcome, setHasShownWelcome] = useState(false);
+  const [isTypingWelcome, setIsTypingWelcome] = useState(false);
+  const [typingText, setTypingText] = useState('');
+  const [showPopupBubble, setShowPopupBubble] = useState(false);
+  const [hasShownPopup, setHasShownPopup] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const popupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Check if mobile
@@ -34,6 +44,43 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Show popup bubble after 1.5 seconds, hide after 5 seconds
+  useEffect(() => {
+    // Don't show if already shown once or chat is open
+    if (hasShownPopup || isOpen) return;
+
+    const showTimer = setTimeout(() => {
+      setShowPopupBubble(true);
+      setHasShownPopup(true);
+    }, 1500);
+
+    return () => {
+      clearTimeout(showTimer);
+    };
+  }, [hasShownPopup, isOpen]);
+
+  // Auto-hide popup after 5 seconds
+  useEffect(() => {
+    if (!showPopupBubble) return;
+
+    popupTimeoutRef.current = setTimeout(() => {
+      setShowPopupBubble(false);
+    }, 5000);
+
+    return () => {
+      if (popupTimeoutRef.current) {
+        clearTimeout(popupTimeoutRef.current);
+      }
+    };
+  }, [showPopupBubble]);
+
+  // Hide popup when chat is opened
+  useEffect(() => {
+    if (isOpen && showPopupBubble) {
+      setShowPopupBubble(false);
+    }
+  }, [isOpen, showPopupBubble]);
 
   useEffect(() => {
     // Generate or retrieve session ID
@@ -68,7 +115,48 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         '*'
       );
     }
-  }, [isOpen]);
+
+    // Show welcome message when chat opens for the first time
+    if (isOpen && !hasShownWelcome && messages.length === 0) {
+      setHasShownWelcome(true);
+      setIsTypingWelcome(true);
+      
+      // Small delay before starting to type
+      setTimeout(() => {
+        let charIndex = 0;
+        const typeSpeed = 25; // milliseconds per character
+        
+        typingIntervalRef.current = setInterval(() => {
+          if (charIndex < WELCOME_MESSAGE.length) {
+            setTypingText(WELCOME_MESSAGE.slice(0, charIndex + 1));
+            charIndex++;
+          } else {
+            // Typing complete - add as a proper message
+            if (typingIntervalRef.current) {
+              clearInterval(typingIntervalRef.current);
+            }
+            setIsTypingWelcome(false);
+            setTypingText('');
+            
+            const welcomeMsg: Message = {
+              id: 'welcome-' + Date.now().toString(),
+              text: WELCOME_MESSAGE,
+              sender: 'assistant',
+              timestamp: new Date(),
+            };
+            setMessages([welcomeMsg]);
+          }
+        }, typeSpeed);
+      }, 500);
+    }
+
+    // Cleanup interval on unmount
+    return () => {
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+      }
+    };
+  }, [isOpen, hasShownWelcome, messages.length]);
 
   const sendMessage = async (textOverride?: string) => {
     const textToSend = textOverride || inputValue.trim();
@@ -157,7 +245,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
       {/* Toggle button - hidden on mobile when chat is open */}
       {showFloatingButton && (
         <button
-          className={`${styles.widgetButton} ${isEmbedded ? styles.embeddedButton : ''}`}
+          className={`${styles.widgetButton} ${isEmbedded ? styles.embeddedButton : ''} ${isOpen ? styles.widgetButtonOpen : ''}`}
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Close chat" : "Open chat"}
           style={isEmbedded ? {
@@ -213,6 +301,32 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             </svg>
           )}
         </button>
+      )}
+
+      {/* Popup welcome bubble */}
+      {showPopupBubble && !isOpen && (
+        <div 
+          className={`${styles.popupBubble} ${isEmbedded ? styles.popupBubbleEmbedded : ''}`}
+          onClick={() => {
+            setShowPopupBubble(false);
+            setIsOpen(true);
+          }}
+        >
+          <div className={styles.popupContent}>
+            <span className={styles.popupEmoji}>👋</span>
+            <span className={styles.popupText}>Hej! Har du spørgsmål? Skriv til os her!</span>
+          </div>
+          <button 
+            className={styles.popupClose}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowPopupBubble(false);
+            }}
+            aria-label="Luk"
+          >
+            ×
+          </button>
+        </div>
       )}
 
       {isOpen && (
@@ -288,7 +402,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
           </div>
 
           <div className={styles.messagesContainer}>
-            {messages.length === 0 ? (
+            {messages.length === 0 && !isTypingWelcome ? (
               <div className={styles.welcomeScreen}>
                 <div className={styles.welcomeAvatar}>
                   <img 
@@ -318,6 +432,23 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
                   </svg>
                   Få et tilbud
                 </button>
+              </div>
+            ) : messages.length === 0 && isTypingWelcome ? (
+              /* Show typing welcome message */
+              <div className={`${styles.message} ${styles.assistantMessage}`}>
+                <div className={styles.messageAvatar}>
+                  <img 
+                    src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
+                    alt="Wedsgaard" 
+                    className={styles.avatarImageSmall}
+                  />
+                </div>
+                <div className={styles.messageBubble}>
+                  <div className={styles.messageText}>
+                    {typingText}
+                    <span className={styles.typingCursor}>|</span>
+                  </div>
+                </div>
               </div>
             ) : (
               <>
