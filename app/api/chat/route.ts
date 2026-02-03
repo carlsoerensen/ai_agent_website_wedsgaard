@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getClientConfig, isAllowedDomain } from '@/lib/clients';
 
-export const runtime = 'edge';
+// Using Node.js runtime to support JSON imports from client configs
+export const runtime = 'nodejs';
 
 // Fallback allowed origins for backward compatibility
 const FALLBACK_ALLOWED_ORIGINS = [
