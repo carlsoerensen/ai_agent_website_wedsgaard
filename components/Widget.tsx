@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import styles from './Widget.module.css';
+import type { ClientConfig } from '@/lib/types';
 
 interface Message {
   id: string;
@@ -11,14 +12,11 @@ interface Message {
 }
 
 interface WidgetProps {
-  webhookUrl?: string;
+  config: ClientConfig;
   isEmbedded?: boolean;
 }
 
-// Welcome message for the carpenter/tømrer business
-const WELCOME_MESSAGE = "Hej! 👋 Velkommen til Tømrerfirmaet Wedsgaard. Jeg er din digitale svend og kan hjælpe dig med alt fra tilbud på tømrerarbejde, til spørgsmål om renovering, tilbygninger eller andre byggeprojekter. Hvordan kan jeg hjælpe dig i dag?";
-
-export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) {
+export default function Widget({ config, isEmbedded = false }: WidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -34,6 +32,13 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
   const inputRef = useRef<HTMLInputElement>(null);
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const popupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Dynamic CSS variables based on client config
+  const themeStyles = {
+    '--primary-color': config.primaryColor,
+    '--primary-color-light': `${config.primaryColor}15`,
+    '--primary-color-hover': adjustColor(config.primaryColor, -15),
+  } as React.CSSProperties;
 
   useEffect(() => {
     // Check if mobile
@@ -83,17 +88,15 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
   }, [isOpen, showPopupBubble]);
 
   useEffect(() => {
-    // Generate or retrieve session ID
-    let storedSessionId = localStorage.getItem('n8n_chat_session_id');
+    // Generate or retrieve session ID (per client)
+    const sessionKey = `n8n_chat_session_id_${config.id}`;
+    let storedSessionId = localStorage.getItem(sessionKey);
     if (!storedSessionId) {
       storedSessionId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-      localStorage.setItem('n8n_chat_session_id', storedSessionId);
+      localStorage.setItem(sessionKey, storedSessionId);
     }
     setSessionId(storedSessionId);
-    
-    // Optional: Load previous session if needed (action=loadPreviousSession)
-    // For now, we start fresh or relying on local state, but we could fetch history here.
-  }, []);
+  }, [config.id]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -127,8 +130,8 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         const typeSpeed = 25; // milliseconds per character
         
         typingIntervalRef.current = setInterval(() => {
-          if (charIndex < WELCOME_MESSAGE.length) {
-            setTypingText(WELCOME_MESSAGE.slice(0, charIndex + 1));
+          if (charIndex < config.welcomeMessage.length) {
+            setTypingText(config.welcomeMessage.slice(0, charIndex + 1));
             charIndex++;
           } else {
             // Typing complete - add as a proper message
@@ -140,7 +143,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             
             const welcomeMsg: Message = {
               id: 'welcome-' + Date.now().toString(),
-              text: WELCOME_MESSAGE,
+              text: config.welcomeMessage,
               sender: 'assistant',
               timestamp: new Date(),
             };
@@ -156,7 +159,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         clearInterval(typingIntervalRef.current);
       }
     };
-  }, [isOpen, hasShownWelcome, messages.length]);
+  }, [isOpen, hasShownWelcome, messages.length, config.welcomeMessage]);
 
   const sendMessage = async (textOverride?: string) => {
     const textToSend = textOverride || inputValue.trim();
@@ -181,7 +184,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         },
         body: JSON.stringify({
           message: userMessage.text,
-          webhookUrl: webhookUrl || process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL,
+          clientId: config.id,
           sessionId: sessionId,
           action: 'sendMessage'
         }),
@@ -194,11 +197,9 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
       const data = await response.json();
       
       // Handle different response formats from n8n
-      // If n8n returns an array of messages (common in chat implementations) or a single object
       let responseText = '';
       
       if (Array.isArray(data)) {
-         // If it's an array, join text responses
          responseText = data.map(item => item.text || item.output || '').join('\n');
       } else {
          responseText = data.response || data.text || data.output || data.message || 'Received response';
@@ -241,7 +242,10 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
   const showFloatingButton = !isMobile || !isOpen;
 
   return (
-    <div className={`${styles.widgetWrapper} ${isEmbedded ? styles.embedded : ''}`}>
+    <div 
+      className={`${styles.widgetWrapper} ${isEmbedded ? styles.embedded : ''}`}
+      style={themeStyles}
+    >
       {/* Toggle button - hidden on mobile when chat is open */}
       {showFloatingButton && (
         <button
@@ -256,14 +260,14 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             top: 'auto',
             width: '56px',
             height: '56px',
-            background: '#6b8068',
+            background: config.primaryColor,
             border: 'none',
             borderRadius: '50%',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(107, 128, 104, 0.4)',
+            boxShadow: `0 4px 16px ${config.primaryColor}66`,
             zIndex: 10000,
             padding: 0
           } : undefined}
@@ -314,7 +318,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
         >
           <div className={styles.popupContent}>
             <span className={styles.popupEmoji}>👋</span>
-            <span className={styles.popupText}>Hej! Har du spørgsmål? Skriv til os her!</span>
+            <span className={styles.popupText}>{config.popupMessage}</span>
           </div>
           <button 
             className={styles.popupClose}
@@ -380,15 +384,15 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
             <div className={styles.headerLeft}>
               <div className={styles.avatar}>
                 <img 
-                  src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
-                  alt="Wedsgaard" 
+                  src={config.logoUrl} 
+                  alt={config.companyName} 
                   className={styles.avatarImage}
                 />
               </div>
               <div className={styles.headerText}>
-                <div className={styles.headerTitle}>Tømrerfirmaet Wedsgaard</div>
+                <div className={styles.headerTitle}>{config.companyName}</div>
                 <div className={styles.headerSubtitle}>
-                  Digital Svend
+                  {config.subtitle}
                 </div>
               </div>
             </div>
@@ -406,13 +410,13 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
               <div className={styles.welcomeScreen}>
                 <div className={styles.welcomeAvatar}>
                   <img 
-                    src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
-                    alt="Wedsgaard" 
+                    src={config.logoUrl} 
+                    alt={config.companyName} 
                     className={styles.avatarImageLarge}
                   />
                 </div>
                 <div className={styles.welcomeTitle}>
-                  Tømrerfirmaet Wedsgaard
+                  {config.companyName}
                 </div>
                 <button 
                   className={styles.demoButton}
@@ -438,8 +442,8 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
               <div className={`${styles.message} ${styles.assistantMessage}`}>
                 <div className={styles.messageAvatar}>
                   <img 
-                    src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
-                    alt="Wedsgaard" 
+                    src={config.logoUrl} 
+                    alt={config.companyName} 
                     className={styles.avatarImageSmall}
                   />
                 </div>
@@ -464,8 +468,8 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
                     {message.sender === 'assistant' && (
                       <div className={styles.messageAvatar}>
                         <img 
-                          src="https://wedsgaard.dk/storage/wedsgaard/logo.png" 
-                          alt="Wedsgaard" 
+                          src={config.logoUrl} 
+                          alt={config.companyName} 
                           className={styles.avatarImageSmall}
                         />
                       </div>
@@ -492,7 +496,7 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
               ref={inputRef}
               type="text"
               className={styles.input}
-              placeholder="Write something..."
+              placeholder="Skriv en besked..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -536,10 +540,16 @@ export default function Widget({ webhookUrl, isEmbedded = false }: WidgetProps) 
           </div>
         </div>
       )}
-
-      {/* Close button removed - using the main button to toggle instead */}
     </div>
   );
 }
 
-
+// Helper function to adjust color brightness
+function adjustColor(color: string, amount: number): string {
+  const hex = color.replace('#', '');
+  const num = parseInt(hex, 16);
+  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
+  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+  return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}

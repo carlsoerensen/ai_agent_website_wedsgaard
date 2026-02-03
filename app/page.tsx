@@ -1,6 +1,19 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import Widget from '@/components/Widget';
+import { getClientConfig } from '@/lib/clients';
+import type { ClientConfig } from '@/lib/types';
 
 export default function Home() {
+  const [config, setConfig] = useState<ClientConfig | null>(null);
+
+  useEffect(() => {
+    // Load wedsgaard config for the demo page
+    const clientConfig = getClientConfig('wedsgaard');
+    setConfig(clientConfig);
+  }, []);
+
   return (
     <main
       style={{
@@ -18,10 +31,8 @@ export default function Home() {
         <p style={{ color: '#6b7280', marginBottom: '32px' }}>
           The widget is available in the bottom right corner
         </p>
-        <Widget />
+        {config && <Widget config={config} />}
       </div>
     </main>
   );
 }
-
-

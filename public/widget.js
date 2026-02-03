@@ -3,10 +3,7 @@
 
   // Configuration
   const DEFAULT_CONFIG = {
-    webhookUrl: null,
     position: 'bottom-right',
-    primaryColor: '#6b8068',
-    widgetUrl: null,
   };
 
   // Iframe dimensions - generous to allow full shadow/glow and popup rendering
@@ -25,15 +22,21 @@
       return;
     }
 
+    // Validate client ID
+    if (!config.clientId) {
+      console.error('AI Agent Widget: data-client attribute is required');
+      return;
+    }
+
     // Create root container
     const root = document.createElement('div');
     root.id = 'ai-agent-widget-root';
     document.body.appendChild(root);
 
-    // Create iframe - starts small (just button visible), expands when opened
+    // Create iframe - uses dynamic route with client ID
     const iframe = document.createElement('iframe');
     iframe.id = 'ai-agent-widget-iframe';
-    iframe.src = `${config.widgetUrl}/widget?webhookUrl=${encodeURIComponent(config.webhookUrl || '')}`;
+    iframe.src = `${config.widgetUrl}/widget/${config.clientId}`;
     iframe.allow = 'clipboard-write';
     
     // Initial state: larger area to show button + popup bubble + glow
@@ -72,7 +75,6 @@
         `;
       } else {
         // Position iframe to allow shadows to render properly
-        // The widget inside will handle the visual positioning
         iframe.style.cssText = `
           position: fixed;
           bottom: 0;
@@ -120,7 +122,10 @@
     // Get configuration from script tag data attributes
     const script = document.currentScript || 
       document.querySelector('script[src*="widget.js"]') ||
-      document.querySelector('script[data-widget-url]');
+      document.querySelector('script[data-client]');
+    
+    // Get client ID (required for multi-tenant support)
+    const clientId = script?.getAttribute('data-client');
     
     // Auto-detect widget URL from script src
     let widgetUrl = script?.getAttribute('data-widget-url');
@@ -137,10 +142,15 @@
       console.error('AI Agent Widget: Could not determine widget URL. Please specify data-widget-url attribute.');
       return;
     }
+
+    if (!clientId) {
+      console.error('AI Agent Widget: data-client attribute is required. Example: <script src="..." data-client="your-client-id"></script>');
+      return;
+    }
     
     const config = {
       ...DEFAULT_CONFIG,
-      webhookUrl: script?.getAttribute('data-webhook-url') || null,
+      clientId: clientId,
       widgetUrl: widgetUrl,
     };
 

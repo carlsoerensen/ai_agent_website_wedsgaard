@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moerup Algerens Widget Test - Local</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.6;
+            background: #f9fafb;
+        }
+        h1 {
+            color: #111827;
+            margin-bottom: 16px;
+        }
+        .test-section {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .code-block {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧹 Moerup Algerens Widget Test</h1>
+    
+    <div class="warning">
+        <strong>⚠️ Important:</strong> Make sure your Next.js dev server is running! Update the port number below if your server is not on port 3000.
+    </div>
+
+    <div class="test-section">
+        <h2>What to Test</h2>
+        <ul>
+            <li>✅ Widget button appears in bottom right with <strong>dark green color (#2d5a27)</strong></li>
+            <li>✅ Breathing glow animation around button</li>
+            <li>✅ Popup bubble appears after 1.5 seconds: "Hej! Har du spørgsmål om algebehandling? Skriv til os her!"</li>
+            <li>✅ Clicking button opens chat with "Mørup Algerens" branding</li>
+            <li>✅ Welcome message types out: "Hej! 👋 Velkommen til Mørup Algerens..."</li>
+            <li>✅ Logo shows Moerup logo</li>
+            <li>✅ Messages send to Moerup n8n webhook</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Embed Code Used</h2>
+        <div class="code-block">
+            <code>
+&lt;script src="https://ai-agent-website-clients.vercel.app/widget.js" data-client="moerup"&gt;&lt;/script&gt;
+            </code>
+        </div>
+    </div>
+
+    <!-- Moerup Widget -->
+    <script src="http://localhost:3003/widget.js" data-client="moerup"></script>
+    
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (document.getElementById('ai-agent-widget-root')) {
+                    console.log('✅ Moerup widget loaded successfully!');
+                } else {
+                    console.error('❌ Widget failed to load. Check that the dev server is running.');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

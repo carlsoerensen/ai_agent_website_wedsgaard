@@ -1,0 +1,17 @@
+{
+  "id": "moerup",
+  "companyName": "Mørup Algerens",
+  "subtitle": "Digital Assistent",
+  "logoUrl": "https://moerup-algerens.dk/assets/images/logo.png",
+  "primaryColor": "#2d5a27",
+  "welcomeMessage": "Hej! 👋 Velkommen til Mørup Algerens. Jeg er din digitale assistent og kan hjælpe dig med alt fra tilbud på algebehandling, fliserens og plænerens, til spørgsmål om imprægnering og tagrens. Hvordan kan jeg hjælpe dig i dag?",
+  "popupMessage": "Hej! Har du spørgsmål om algebehandling? Skriv til os her!",
+  "webhookUrl": "https://handwork.app.n8n.cloud/webhook/2ff562bb-d8b4-4ef1-b216-830693d724cc/chat",
+  "allowedDomains": [
+    "moerup-algerens.dk",
+    "www.moerup-algerens.dk",
+    "ai-agent-website-clients.vercel.app",
+    "localhost",
+    "127.0.0.1"
+  ]
+}

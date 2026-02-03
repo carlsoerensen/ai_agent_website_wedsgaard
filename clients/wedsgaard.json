@@ -1,0 +1,18 @@
+{
+  "id": "wedsgaard",
+  "companyName": "Tømrerfirmaet Wedsgaard",
+  "subtitle": "Digital Svend",
+  "logoUrl": "https://wedsgaard.dk/storage/wedsgaard/logo.png",
+  "primaryColor": "#6b8068",
+  "welcomeMessage": "Hej! 👋 Velkommen til Tømrerfirmaet Wedsgaard. Jeg er din digitale svend og kan hjælpe dig med alt fra tilbud på tømrerarbejde, til spørgsmål om renovering, tilbygninger eller andre byggeprojekter. Hvordan kan jeg hjælpe dig i dag?",
+  "popupMessage": "Hej! Har du spørgsmål? Skriv til os her!",
+  "webhookUrl": "https://handwork.app.n8n.cloud/webhook/c5f56074-24af-41df-ad53-26dc67dd984d/chat",
+  "allowedDomains": [
+    "wedsgaard.dk",
+    "www.wedsgaard.dk",
+    "ai-agent-website-clients.vercel.app",
+    "ai-agent-website-wedsgaard.vercel.app",
+    "localhost",
+    "127.0.0.1"
+  ]
+}

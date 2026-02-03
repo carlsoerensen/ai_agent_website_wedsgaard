@@ -1,6 +1,9 @@
 /* Widget Wrapper - Container for the entire widget */
 .widgetWrapper {
-  /* Default: no special styling for direct rendering */
+  /* Default CSS variables - can be overridden via inline styles */
+  --primary-color: #6b8068;
+  --primary-color-light: #6b806815;
+  --primary-color-hover: #5a6f57;
 }
 
 /* Embedded mode: wrapper fills the iframe */
@@ -25,7 +28,7 @@
   right: 20px;
   width: 56px;
   height: 56px;
-  background: linear-gradient(145deg, #7a9177 0%, #6b8068 50%, #5d7359 100%);
+  background: var(--primary-color);
   border: none;
   border-radius: 50%;
   cursor: pointer;
@@ -300,7 +303,7 @@
 .avatarPixel {
   width: 24px;
   height: 24px;
-  background: linear-gradient(135deg, #7a9177 0%, #6b8068 100%);
+  background: var(--primary-color);
   border-radius: 4px;
 }
 
@@ -427,7 +430,7 @@
 .avatarPixelLarge {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #7a9177 0%, #6b8068 100%);
+  background: var(--primary-color);
   border-radius: 8px;
 }
 
@@ -494,7 +497,7 @@
 .avatarPixelSmall {
   width: 18px;
   height: 18px;
-  background: linear-gradient(135deg, #7a9177 0%, #6b8068 100%);
+  background: var(--primary-color);
   border-radius: 3px;
 }
 
@@ -513,7 +516,7 @@
 }
 
 .userMessage .messageBubble {
-  background: #6b8068;
+  background: var(--primary-color);
   color: white;
   border-bottom-right-radius: 4px;
 }
@@ -534,7 +537,7 @@
 .typingCursor {
   display: inline-block;
   animation: blink 0.8s ease-in-out infinite;
-  color: #6b8068;
+  color: var(--primary-color);
   font-weight: 300;
   margin-left: 1px;
 }
@@ -627,7 +630,7 @@
 }
 
 .input:focus {
-  border-color: #6b8068;
+  border-color: var(--primary-color);
 }
 
 .input::placeholder {
@@ -642,7 +645,7 @@
 .sendButton {
   width: 36px;
   height: 36px;
-  background: #6b8068;
+  background: var(--primary-color);
   border: none;
   border-radius: 50%;
   color: white;
@@ -655,7 +658,7 @@
 }
 
 .sendButton:hover:not(:disabled) {
-  background: #5a6f57;
+  background: var(--primary-color-hover);
 }
 
 .sendButton:disabled {
@@ -689,7 +692,7 @@
 
 .poweredByLink {
   font-size: 10px;
-  color: #6b8068;
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
   line-height: 1;
@@ -697,7 +700,7 @@
 }
 
 .poweredByLink:hover {
-  color: #5a6f57;
+  color: var(--primary-color-hover);
   text-decoration: underline;
 }
 
