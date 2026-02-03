@@ -22,9 +22,9 @@
       return;
     }
 
-    // Validate client ID
+    // Validate client ID (should always be set due to default in init(), but double-check)
     if (!config.clientId) {
-      console.error('AI Agent Widget: data-client attribute is required');
+      console.error('AI Agent Widget: clientId is required');
       return;
     }
 
@@ -125,7 +125,8 @@
       document.querySelector('script[data-client]');
     
     // Get client ID (required for multi-tenant support)
-    const clientId = script?.getAttribute('data-client');
+    // Default to "wedsgaard" for backward compatibility with existing embeds
+    let clientId = script?.getAttribute('data-client');
     
     // Auto-detect widget URL from script src
     let widgetUrl = script?.getAttribute('data-widget-url');
@@ -133,6 +134,10 @@
       try {
         const url = new URL(script.src);
         widgetUrl = url.origin;
+        // Handle redirect from old domain to new domain
+        if (widgetUrl.includes('ai-agent-website-wedsgaard.vercel.app')) {
+          widgetUrl = widgetUrl.replace('ai-agent-website-wedsgaard.vercel.app', 'ai-agent-website-clients.vercel.app');
+        }
       } catch (e) {
         console.error('Failed to parse widget URL from script src');
       }
@@ -143,9 +148,10 @@
       return;
     }
 
+    // Default to "wedsgaard" for backward compatibility if no client ID specified
     if (!clientId) {
-      console.error('AI Agent Widget: data-client attribute is required. Example: <script src="..." data-client="your-client-id"></script>');
-      return;
+      console.warn('AI Agent Widget: No data-client attribute found. Defaulting to "wedsgaard" for backward compatibility.');
+      clientId = 'wedsgaard';
     }
     
     const config = {
