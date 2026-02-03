@@ -151,8 +151,8 @@ export async function OPTIONS(request: NextRequest) {
     const wedsgaardConfig = getClientConfig('wedsgaard');
     const moerupConfig = getClientConfig('moerup');
     
-    isAllowed = (wedsgaardConfig && isAllowedDomain(wedsgaardConfig, origin)) ||
-                (moerupConfig && isAllowedDomain(moerupConfig, origin));
+    isAllowed = !!(wedsgaardConfig && isAllowedDomain(wedsgaardConfig, origin)) ||
+                !!(moerupConfig && isAllowedDomain(moerupConfig, origin));
   }
   
   const allowOrigin = isAllowed ? origin : 'null';
